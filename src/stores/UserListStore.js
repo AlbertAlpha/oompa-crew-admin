@@ -12,38 +12,46 @@ class UserListStore {
     entries: [],
     numEntries: null,
     page: 1,
-    filter: {
-      profession: '',
-      name: ''
+    search: {
+      currentValue: null,
+      results: []
     }
   };
 
-  // Public Actions that modify state
-  search(filter) {
-    const params = {
-      profession: filter.profession || null,
-      name: filter.name || null
-    };
+  fetchUsers(page = 1) {
     this.listState.loading = true;
-    this.listState.filter = filter;
-    UserService.getUsers(params).then(users => {
-      this.listState.entries = users;
-      this.listState.numEntries = users.length;
+    UserService.getUsers(page).then(users => {
+      this.listState.entries = users.results;
+      this.listState.numEntries = users.results.length;
       this.listState.loading = false;
-    })
-    .catch(err => {
-      this.listState.numEntries = null;
-      this.listState.loading = false;
+      this.searchUsers(null);
+    });
+  }
+
+  // Public Actions that modify state
+  searchUsers(value) {
+
+    if (!value) {
+      this.listState.search.results = this.listState.entries; // all items
+      return;
+    }
+    const searchValue = value.toLowerCase();
+    this.listState.search.results = this.listState.entries.filter(user => {
+      if (!value) return true;
+      if (user.first_name.toLowerCase().includes(searchValue)) return true;
+      if (user.last_name.toLowerCase().includes(searchValue)) return true;
+      if (user.profession.toLowerCase().includes(searchValue)) return true;
+      return false;
     });
   }
 }
 
 decorate(UserListStore, {
   // observable state values
-  // filter: observable,
   listState: observable,
   // public actions
-  search: action
+  fetchUsers: action,
+  searchUsers: action
 });
 
 export default UserListStore;

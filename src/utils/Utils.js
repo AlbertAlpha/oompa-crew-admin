@@ -44,6 +44,13 @@ class Utils {
   static copy(obj) {
     return obj ? JSON.parse(JSON.stringify(obj)) : obj;
   }
+  static getGenderName(genderType) {
+    switch (genderType) {
+      case 'F': return 'Woman';
+      case 'M': return 'Man';
+      default: return 'Unspecified';
+    }
+  }
 }
 
 export default Utils;

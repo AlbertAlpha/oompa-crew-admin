@@ -1,7 +1,7 @@
 import { AuthApiClient } from './AuthApiClient';
 import config from "../config/config";
 
-const client = new AuthApiClient(config.endpointServices.catalog);
+const client = new AuthApiClient(config.endpointServices.user);
 const UserService = {
   getUsers(page) {
     return client.get('/', {
