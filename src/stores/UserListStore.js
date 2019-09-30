@@ -12,25 +12,26 @@ class UserListStore {
     entries: [],
     numEntries: null,
     page: 1,
+    totalPages: 0,
     search: {
       currentValue: null,
       results: []
     }
   };
 
-  fetchUsers(page = 1) {
+  fetchUsers(page) {
+    page = page ? page : this.listState.page + 1;
     this.listState.loading = true;
-    UserService.getUsers(page).then(users => {
-      this.listState.entries = users.results;
-      this.listState.numEntries = users.results.length;
+    return UserService.getUsers(page).then(users => {
+      this.listState.entries = this.listState.entries.concat(users.results);
+      this.listState.numEntries =this.listState.entries.length;
+      this.listState.page = users.current;
+      this.listState.totalPages = users.total;
       this.listState.loading = false;
-      this.searchUsers(null);
     });
   }
 
-  // Public Actions that modify state
   searchUsers(value) {
-
     if (!value) {
       this.listState.search.results = this.listState.entries; // all items
       return;

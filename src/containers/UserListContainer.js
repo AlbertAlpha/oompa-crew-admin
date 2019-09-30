@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import "../resources/stylesheets/users.scss";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Utils from '../utils/Utils';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 class UserListContainer extends Component {
 
@@ -12,8 +13,12 @@ class UserListContainer extends Component {
   }
 
   componentDidMount() {
-    this.store.fetchUsers();
+    this.store.fetchUsers(1).then(() => this.store.searchUsers(null));
   }
+
+  loadMoreUsers = () => {
+    this.store.fetchUsers().then(() => this.store.searchUsers(null));
+  };
 
   onChangeSearchValue = (event) => {
     const currentValue = event.target.value;
@@ -46,26 +51,33 @@ class UserListContainer extends Component {
           </div>
         </div>
 
-        <div className="container">
-          <div className="row justify-content-center">
-            {listState.search.results.map(user =>
-              <div className="col-sm mb-4" key={user.id}>
-                <div className="card mx-auto" style={{width: '18rem'}}>
-                  <img src={user.image} className="card-img-top"  alt={user.name}/>
-                  <div className="card-body">
-                    <h5 className="card-title">{user.first_name + ' ' + user.last_name}</h5>
-                    <p className="card-text">
-                      {Utils.getGenderName(user.gender)}
-                      <br />
-                      {user.profession}
-                    </p>
+        <InfiniteScroll
+          dataLength={listState.entries.length} //This is important field to render the next data
+          next={this.loadMoreUsers}
+          hasMore={true}
+          loader={<h4>Loading more users...</h4>}
+          endMessage={<p className="text-center">No more users to load.</p>}
+        >
+          <div className="container">
+            <div className="row justify-content-center">
+              {listState.search.results.map(user =>
+                <div className="col-sm mb-4" key={user.id}>
+                  <div className="card mx-auto" style={{width: '18rem'}}>
+                    <img src={user.image} className="card-img-top"  alt={user.name}/>
+                    <div className="card-body">
+                      <h5 className="card-title">{user.first_name + ' ' + user.last_name}</h5>
+                      <p className="card-text">
+                        {Utils.getGenderName(user.gender)}
+                        <br />
+                        {user.profession}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-
+        </InfiniteScroll>
       </div>
     );
   }
