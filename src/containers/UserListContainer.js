@@ -17,7 +17,8 @@ class UserListContainer extends Component {
   }
 
   loadMoreUsers = () => {
-    this.store.fetchUsers().then(() => this.store.searchUsers(null));
+    const currentSearchValue = this.store.listState.currentSearchValue;
+    this.store.fetchUsers().then(() => this.store.searchUsers(currentSearchValue));
   };
 
   onChangeSearchValue = (event) => {
@@ -28,6 +29,7 @@ class UserListContainer extends Component {
 
   render() {
     const listState = this.store.listState;
+    const hasMoreUsersToLoad = this.store.hasMoreUsersToLoad;
     return (
       <div className="mb-3">
 
@@ -42,7 +44,8 @@ class UserListContainer extends Component {
           <div className="row justify-content-center">
             <div className="col-md-5">
               <div className="input-group mb-3">
-                <input id="search" type="text" className="form-control" placeholder="Search" onChange={this.onChangeSearchValue} />
+                <input id="search" type="text" className="form-control" placeholder="Search"
+                       onChange={this.onChangeSearchValue} />
                 <div className="input-group-append">
                   <span className="input-group-text"><FontAwesomeIcon icon="search"/></span>
                 </div>
@@ -54,13 +57,13 @@ class UserListContainer extends Component {
         <InfiniteScroll
           dataLength={listState.entries.length} //This is important field to render the next data
           next={this.loadMoreUsers}
-          hasMore={true}
+          hasMore={hasMoreUsersToLoad}
           loader={<h4>Loading more users...</h4>}
           endMessage={<p className="text-center">No more users to load.</p>}
         >
           <div className="container">
             <div className="row justify-content-center">
-              {listState.search.results.map(user =>
+              {listState.results.map(user =>
                 <div className="col-sm mb-4" key={user.id}>
                   <div className="card mx-auto" style={{width: '18rem'}}>
                     <img src={user.image} className="card-img-top"  alt={user.name}/>
