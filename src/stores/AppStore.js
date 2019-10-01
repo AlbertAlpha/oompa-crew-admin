@@ -9,12 +9,13 @@ class AppStore {
   }
 
   /**
-   * TODO: This could be substituted by using context in all components
-   * TODO: but it will require to migrate from class components to functional components
+   * TODO: This is not the most elegant way to pass store to containers,
+   * TODO: maybe it could be substituted by using context in all components
    */
   getStoreForRoute(key) {
     switch (key) {
       case 'users': return this.userListStore;
+      case 'user-details': return this.userListStore;
       default: return null;
     }
   }

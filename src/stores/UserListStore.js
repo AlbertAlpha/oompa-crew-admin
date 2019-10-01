@@ -55,6 +55,10 @@ class UserListStore {
     });
   }
 
+  fetchUserDetails(userId) {
+    return UserService.getUser(userId);
+  }
+
   ///////////////////////////// COMPUTED VALUES ////////////////////////////////////////////////////////////////////////
 
   get hasMoreUsersToLoad() {
@@ -68,6 +72,7 @@ decorate(UserListStore, {
   // public actions
   fetchUsers: action,
   searchUsers: action,
+  fetchUserDetails: action,
   // computed values derived from state
   hasMoreUsersToLoad: computed
 });

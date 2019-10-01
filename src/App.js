@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import Loading from './layouts/Loading';
 import icons from './config/icons';
@@ -19,11 +19,11 @@ class App extends Component {
 
   render() {
     return (
-      <HashRouter>
+      <Router>
         <Switch>
           <Route path="/" name="Home" component={AppMain} />
         </Switch>
-      </HashRouter>
+      </Router>
     );
   }
 }
