@@ -1,37 +1,24 @@
-import React, {useState} from 'react';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {Modal, Button} from 'react-bootstrap';
+import React from 'react';
+import {Link} from "react-router-dom";
+import Utils from "../utils/Utils";
 
-const UserDetails = ({json, title}) => {
-
-  const [showDetails, setShowDetails] = useState(false);
-
-  function handleClickDetails() {
-    setShowDetails(true);
-  }
-
-  function handleCloseDetails() {
-    setShowDetails(false);
-  }
-
-  return (
-    <>
-      <Button variant="link" size="sm" onClick={handleClickDetails}>
-        <FontAwesomeIcon icon="search-plus" className="mr-1"/>
-      </Button>
-      <Modal show={showDetails} onHide={handleCloseDetails} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>{title || 'Detalles'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <pre className="pre-scrollable">{JSON.stringify(JSON.parse(json), null, ' ')}</pre>
-        </Modal.Body>
-        <Modal.Footer className="justify-content-center">
-          <Button variant="primary" onClick={handleCloseDetails}>Aceptar</Button>
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-};
+const UserDetails = ({user}) => (
+    <div className="col-sm mb-4">
+      <div className="card mx-auto" style={{width: '18rem'}}>
+        <img src={user.image} className="card-img-top"  alt={user.name}/>
+        <div className="card-body">
+          <h5 className="card-title">
+            <Link to={'users/' + user.id}>
+              {user.first_name + ' ' + user.last_name}
+            </Link>
+          </h5>
+          <div className="card-text">
+            <div className="mb-1">{Utils.getGenderName(user.gender)}</div>
+            <div className="mb-2">{user.profession}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+);
 
 export default UserDetails;

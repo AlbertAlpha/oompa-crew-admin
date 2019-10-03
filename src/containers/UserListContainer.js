@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
 import { observer } from 'mobx-react';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import Utils from '../utils/Utils';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import UserDetails from "../components/UserDetails";
+import SearchInput from "../components/SearchInput";
 
 class UserListContainer extends Component {
 
@@ -13,18 +12,19 @@ class UserListContainer extends Component {
   }
 
   componentDidMount() {
-    if (this.store.listState.entries.length === 0) {
-      this.store.fetchUsers(1).then(() => this.store.searchUsers(null));
+    const loaded = this.store.loadStoredState();
+    if (loaded) {
+      this.store.searchUsers();
+    } else {
+      this.store.getUsers().then(() => this.store.searchUsers(null));
     }
   }
 
   loadMoreUsers = () => {
-    const currentSearchValue = this.store.listState.currentSearchValue;
-    this.store.fetchUsers().then(() => this.store.searchUsers(currentSearchValue));
+    this.store.getUsers().then(() => this.store.searchUsers());
   };
 
-  onChangeSearchValue = (event) => {
-    const currentValue = event.target.value;
+  onChangeSearchValue = (currentValue) => {
     console.log('Searching for ' + currentValue);
     this.store.searchUsers(currentValue);
   };
@@ -44,14 +44,11 @@ class UserListContainer extends Component {
 
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-md-5">
-              <div className="input-group mb-3">
-                <input id="search" type="text" className="form-control" placeholder="Search"
-                       onChange={this.onChangeSearchValue} />
-                <div className="input-group-append">
-                  <span className="input-group-text"><FontAwesomeIcon icon="search"/></span>
-                </div>
-              </div>
+            <div className="col-5">
+              <SearchInput
+                initialValue={listState.currentSearchValue}
+                onChangeSearchValue={this.onChangeSearchValue}
+              />
             </div>
           </div>
         </div>
@@ -65,24 +62,7 @@ class UserListContainer extends Component {
         >
           <div className="container">
             <div className="row justify-content-center">
-              {listState.results.map(user =>
-                <div className="col-sm mb-4" key={user.id}>
-                  <div className="card mx-auto" style={{width: '18rem'}}>
-                    <img src={user.image} className="card-img-top"  alt={user.name}/>
-                    <div className="card-body">
-                      <h5 className="card-title">
-                        <Link to={'users/' + user.id}>
-                          {user.first_name + ' ' + user.last_name}
-                        </Link>
-                      </h5>
-                      <div className="card-text">
-                        <div className="mb-1">{Utils.getGenderName(user.gender)}</div>
-                        <div className="mb-2">{user.profession}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {listState.results.map(user => <UserDetails key={user.id} user={user} />)}
             </div>
           </div>
         </InfiniteScroll>

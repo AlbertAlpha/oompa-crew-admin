@@ -8,7 +8,7 @@ const UserDetailsContainer = (props) => {
   const [user, setUser] = useState(null);
 
   function initialize() {
-    props.store.fetchUserDetails(userId).then(setUser);
+    props.store.getUserDetails(userId).then(setUser);
   }
 
   useEffect(initialize, []); // this is called only once!
