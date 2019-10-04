@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import Utils from "../utils/Utils";
 
-const UserDetails = ({user}) => (
+const UserGridItem = ({user}) => (
     <div className="col-sm mb-4">
       <div className="card mx-auto" style={{width: '18rem'}}>
         <img src={user.image} className="card-img-top"  alt={user.name}/>
@@ -21,4 +21,4 @@ const UserDetails = ({user}) => (
     </div>
 );
 
-export default UserDetails;
+export default UserGridItem;

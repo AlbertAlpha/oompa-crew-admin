@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import UserDetails from "../components/UserDetails";
+import UserGridItem from "../components/UserGridItem";
 import SearchInput from "../components/SearchInput";
 
 class UserListContainer extends Component {
@@ -62,7 +62,7 @@ class UserListContainer extends Component {
         >
           <div className="container">
             <div className="row justify-content-center">
-              {listState.results.map(user => <UserDetails key={user.id} user={user} />)}
+              {listState.results.map(user => <UserGridItem key={user.id} user={user} />)}
             </div>
           </div>
         </InfiniteScroll>
