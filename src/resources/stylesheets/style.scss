@@ -1,0 +1,11 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import Bootstrap source files
+@import "~bootstrap/scss/bootstrap"; // from bootstrap node_modules package
+
+// Import Animate CSS source files
+@import "~animate.css/animate.min.css"; // from animate.css node_modules package
+
+// If you want to add something do it here
+@import "custom";
